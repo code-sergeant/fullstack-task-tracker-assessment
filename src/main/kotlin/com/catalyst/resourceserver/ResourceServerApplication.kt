@@ -14,7 +14,7 @@ class ResourceServerApplication {
     fun run(repository: TasksRepository) = ApplicationRunner {
         repository.save(
             TaskModel(
-                title = "Example Task",
+                title = "Example Task"
             )
         )
     }
