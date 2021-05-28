@@ -1,8 +1,25 @@
 import React from "react";
-import {ServerTaskItem} from "../../types/types";
+import {TaskListItem} from "./TaskListItem";
+import {TaskItem} from "../../types/types";
 
 type Props = {
-  tasks: ServerTaskItem[];
+  tasks: TaskItem[];
 };
 
-export const TaskList: React.FC<Props> = ({ tasks }) => <></>;
+export const TaskList: React.FC<Props> = ({tasks}) => (
+  <>
+    {tasks.length > 0 ? (
+      <ul data-testid="task-list">
+        {tasks.map((task, index) => (
+          <TaskListItem
+            key={`${task.title}-${index}`}
+            title={task.title}
+            date={task.date}
+          />
+        ))}
+      </ul>
+    ) : (
+      <h4>No tasks have been added yet.</h4>
+    )}
+  </>
+);

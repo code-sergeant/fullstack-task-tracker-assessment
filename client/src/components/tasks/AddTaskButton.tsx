@@ -4,4 +4,8 @@ type Props = {
   addTaskHandler: () => void;
 };
 
-export const AddTaskButton: React.FC<Props> = ({ addTaskHandler }) => <></>;
+export const AddTaskButton: React.FC<Props> = ({ addTaskHandler }) => (
+  <button autoFocus onClick={addTaskHandler}>
+    Add Task
+  </button>
+);
