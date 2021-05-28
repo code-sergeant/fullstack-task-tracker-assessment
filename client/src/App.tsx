@@ -4,25 +4,14 @@ import {TaskItem} from "./types/types";
 import {AddTaskButton} from "./components/tasks/AddTaskButton";
 import {AddTaskModal} from "./components/tasks/AddTaskModal";
 import {TaskList} from "./components/tasks/TaskList";
-import {getAllTasks} from "./api/getAllTasks";
+import {TasksApiContextProvider} from "./contexts/tasksContext";
 
 export default function App() {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [tasks, setTasks] = useState<TaskItem[]>([]);
-
-  useEffect(() => {
-    getAllTasks()
-      .then(res => setTasks(res.data._embedded.tasks))
-      .catch(console.error)
-  }, [])
-
-  const addTaskHandler = (taskItem: TaskItem) => {
-    setTasks([...tasks, taskItem]);
-    setIsTaskModalOpen(false);
-  };
 
   return (
     <div className="App">
+    <TasksApiContextProvider>
       <h1>Task Tracker</h1>
       {!isTaskModalOpen && (
         <AddTaskButton
@@ -31,11 +20,12 @@ export default function App() {
       )}
       {isTaskModalOpen && (
         <AddTaskModal
-          onSubmit={addTaskHandler}
+          onSubmit={() => setIsTaskModalOpen(false)}
           onCancel={() => setIsTaskModalOpen(false)}
         />
       )}
-      <TaskList tasks={tasks}/>
+      <TaskList/>
+    </TasksApiContextProvider>
     </div>
   );
 }

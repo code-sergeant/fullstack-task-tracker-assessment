@@ -1,8 +1,10 @@
 import * as React from "react";
-import { render, screen } from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
 import {AddTaskModal} from "./AddTaskModal";
+import {TasksApiContextProvider} from "../../contexts/tasksContext";
+import {TaskItem} from "../../types/types";
 
 describe("Add Task Modal", () => {
   let mockOnClick: () => void;
@@ -10,8 +12,19 @@ describe("Add Task Modal", () => {
   beforeEach(() => {
     mockOnClick = jest.fn();
     mockOnCancel = jest.fn();
-    render(<AddTaskModal onSubmit={mockOnClick} onCancel={mockOnCancel} />);
-  });
+    render(
+      <TasksApiContextProvider overrides={{
+        tasks:
+          [
+            {id: 1, title: "Task 1", date: new Date(2021, 1, 1)},
+            {id: 2, title: "Task 2", date: new Date(2021, 1, 2)}
+          ],
+        createTask: jest.fn().mockResolvedValue({id: 3, title: "Task 3"} as TaskItem)
+      }}>
+        <AddTaskModal onSubmit={mockOnClick} onCancel={mockOnCancel}/>);
+      </TasksApiContextProvider>
+    );
+  })
 
   it("renders the task title field", () => {
     expect(screen.getByLabelText("Task Title"));
@@ -30,14 +43,12 @@ describe("Add Task Modal", () => {
     expect(screen.getByText("Submit")).not.toBeDisabled();
   });
 
-  it("clears the task title field when submit is clicked", () => {
-    const titleInput = screen.getByLabelText("Task Title") as HTMLInputElement;
-
-    userEvent.type(titleInput, "Test Title");
+  it("clears the task title field when submit is clicked", async () => {
+    userEvent.type(screen.getByLabelText("Task Title"), "Test Title");
 
     userEvent.click(screen.getByText("Submit"));
 
-    expect(titleInput.value).toEqual("");
+    expect((await screen.findByLabelText("Task Title") as HTMLInputElement).value).toEqual("");
   });
 
   it("calls onCancel when 'Cancel' button is clicked", () => {
@@ -48,14 +59,13 @@ describe("Add Task Modal", () => {
 
   // More advanced React Assessment
   describe("Keyboard Shortcuts", () => {
-    it("clears the task title field when user submits using the enter key", () => {
+    it("clears the task title field when user submits using the enter key", async () => {
       const titleInput = screen.getByLabelText("Task Title") as HTMLInputElement;
 
       userEvent.type(titleInput, "Test Title");
-
       userEvent.type(titleInput, "{enter}");
 
-      expect(titleInput.value).toEqual("");
+      expect((await screen.findByLabelText("Task Title") as HTMLInputElement).value).toEqual("");
     });
 
     it("displays an error message if user presses Enter while required fields are empty", () => {
@@ -64,11 +74,12 @@ describe("Add Task Modal", () => {
       expect(screen.getByText("Please enter a title."));
     });
 
-    // TODO: The actual component works, but this test doesn't for some reason
-    // it("calls onCancel when user presses Escape", () => {
-    //   userEvent.type(screen.getByLabelText("Task Title"), "{escape}");
-    //
-    //   expect(mockOnCancel).toHaveBeenCalled();
-    // });
+    it("calls onCancel when user presses Escape", () => {
+      userEvent.type(screen.getByLabelText("Task Title"), "{escape}");
+
+      waitFor(() => {
+        expect(mockOnCancel).toHaveBeenCalled();
+      })
+    });
   });
 });

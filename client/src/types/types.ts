@@ -15,3 +15,10 @@ export type CreateTaskInput = {
 }
 
 export type CreateTaskApiResponse = TaskItem
+
+
+export type UpdateTaskInput = {
+  id: number;
+  title: string;
+  date: string;
+}

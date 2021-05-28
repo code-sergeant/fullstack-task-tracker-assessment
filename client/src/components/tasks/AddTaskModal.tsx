@@ -1,25 +1,25 @@
-import React, {useState} from "react";
-import {createTask} from "../../api/createTask";
-import {TaskItem} from "../../types/types";
+import React, {useContext, useState} from "react";
+import {TasksContext} from "../../contexts/tasksContext";
 
 type Props = {
-  onSubmit: (taskItem: TaskItem) => void;
+  onSubmit: () => void;
   onCancel: () => void;
 };
 
 export const AddTaskModal: React.FC<Props> = ({onSubmit, onCancel}) => {
   const [title, setTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const {createTask} = useContext(TasksContext)
 
   const onSubmitHandler = () => {
     if (!title.trim()) {
       setErrorMessage("Please enter a title.");
     } else {
-      createTask({title})
-        .then(res => {
+      createTask({title}).then(() => {
           setTitle("")
-          onSubmit(res.data);
-        })
+          onSubmit()
+        }
+      )
     }
   }
 

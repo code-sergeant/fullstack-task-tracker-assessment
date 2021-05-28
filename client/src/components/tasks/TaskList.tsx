@@ -1,24 +1,24 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import {TaskListItem} from "./TaskListItem";
-import {TaskItem} from "../../types/types";
+import {TasksContext} from "../../contexts/tasksContext";
 
-type Props = {
-  tasks: TaskItem[];
+export const TaskList: React.FC = () => {
+  const {tasks} = useContext(TasksContext)
+
+  return (
+    <>
+      {tasks.length > 0 ? (
+        <ul data-testid="task-list">
+          {tasks.map((task, index) => (
+            <TaskListItem
+              key={`${task.title}-${index}`}
+              task={task}
+            />
+          ))}
+        </ul>
+      ) : (
+        <h4>No tasks have been added yet.</h4>
+      )}
+    </>
+  );
 };
-
-export const TaskList: React.FC<Props> = ({tasks}) => (
-  <>
-    {tasks.length > 0 ? (
-      <ul data-testid="task-list">
-        {tasks.map((task, index) => (
-          <TaskListItem
-            key={`${task.title}-${index}`}
-            task={task}
-          />
-        ))}
-      </ul>
-    ) : (
-      <h4>No tasks have been added yet.</h4>
-    )}
-  </>
-);
