@@ -1,11 +1,17 @@
 export type TaskItem = {
-  id?: number;
+  id: number;
   title: string;
   date: Date;
 }
 
-export interface TasksApiResponse {
+export interface GetAllTasksApiResponse {
   _embedded: {
     tasks: TaskItem[]
   }
 }
+
+export type CreateTaskInput = {
+  title: string;
+}
+
+export type CreateTaskApiResponse = TaskItem

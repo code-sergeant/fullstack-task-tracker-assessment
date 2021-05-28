@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import {createTask} from "../../api/createTask";
 import {TaskItem} from "../../types/types";
 
 type Props = {
@@ -6,21 +7,21 @@ type Props = {
   onCancel: () => void;
 };
 
-export const AddTaskModal: React.FC<Props> = ({ onSubmit, onCancel }) => {
+export const AddTaskModal: React.FC<Props> = ({onSubmit, onCancel}) => {
   const [title, setTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmitHandler = () => {
-    if (title === "") {
+    if (!title.trim()) {
       setErrorMessage("Please enter a title.");
     } else {
-      setTitle("");
-      onSubmit({
-        title,
-        date: new Date()
-      });
+      createTask({title})
+        .then(res => {
+          setTitle("")
+          onSubmit(res.data);
+        })
     }
-  };
+  }
 
   const onCancelHandler = () => {
     setTitle("");
@@ -56,7 +57,7 @@ export const AddTaskModal: React.FC<Props> = ({ onSubmit, onCancel }) => {
         Submit
       </button>
       <button onClick={onCancel}>Cancel</button>
-      {errorMessage && !title && <p style={{ color: "red" }}>{errorMessage}</p>}
+      {errorMessage && !title && <p style={{color: "red"}}>{errorMessage}</p>}
     </>
   );
 };

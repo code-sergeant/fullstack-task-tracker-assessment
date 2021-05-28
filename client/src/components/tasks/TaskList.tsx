@@ -13,8 +13,7 @@ export const TaskList: React.FC<Props> = ({tasks}) => (
         {tasks.map((task, index) => (
           <TaskListItem
             key={`${task.title}-${index}`}
-            title={task.title}
-            date={task.date}
+            task={task}
           />
         ))}
       </ul>
