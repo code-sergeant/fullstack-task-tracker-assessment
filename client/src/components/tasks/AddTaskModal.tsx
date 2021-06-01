@@ -1,5 +1,14 @@
 import React, {useContext, useState} from "react";
 import {TasksContext} from "../../contexts/tasksContext";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  FormHelperText,
+  Grid,
+  TextField
+} from "@material-ui/core";
 
 type Props = {
   onSubmit: () => void;
@@ -11,15 +20,13 @@ export const AddTaskModal: React.FC<Props> = ({onSubmit, onCancel}) => {
   const [errorMessage, setErrorMessage] = useState("");
   const {createTask} = useContext(TasksContext)
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = async () => {
     if (!title.trim()) {
       setErrorMessage("Please enter a title.");
     } else {
-      createTask({title}).then(() => {
-          setTitle("")
-          onSubmit()
-        }
-      )
+      await createTask({title})
+      setTitle("")
+      onSubmit()
     }
   }
 
@@ -28,10 +35,10 @@ export const AddTaskModal: React.FC<Props> = ({onSubmit, onCancel}) => {
     onCancel();
   };
 
-  const onKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyHandler = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        onSubmitHandler();
+        await onSubmitHandler();
         break;
       case "Escape":
         onCancelHandler();
@@ -43,21 +50,37 @@ export const AddTaskModal: React.FC<Props> = ({onSubmit, onCancel}) => {
 
   return (
     <>
-      <label htmlFor={"title-input"}>Task Title</label>
-      <input
-        name={"TaskTitleInput"}
-        id={"title-input"}
-        placeholder={"Task Title"}
-        value={title}
-        autoFocus
-        onChange={(e) => setTitle(e.target.value)}
-        onKeyDown={onKeyHandler}
-      />
-      <button onClick={onSubmitHandler} disabled={title === ""}>
-        Submit
-      </button>
-      <button onClick={onCancel}>Cancel</button>
-      {errorMessage && !title && <p style={{color: "red"}}>{errorMessage}</p>}
+      <Dialog open={true} onClose={onCancel} aria-labelledby="form-dialog-title">
+        <DialogTitle color={"#444"} id="form-dialog-title">Task Dialog</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} justify={"flex-end"}>
+            <Grid item xs={12}>
+              <TextField
+                autoFocus
+                variant={"filled"}
+                label="Task Title"
+                type="text"
+                placeholder={"Task Title"}
+                fullWidth
+                id={"title-input"}
+                onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={onKeyHandler}
+              />
+              <FormHelperText error={!!errorMessage} color={"error"}>{errorMessage}</FormHelperText>
+
+            </Grid>
+            <Grid item>
+              <Button onClick={onCancel}>Cancel</Button>
+              <Button variant={"contained"} color={"primary"} onClick={onSubmitHandler} disabled={title === ""}>
+                Submit
+              </Button>
+
+            </Grid>
+
+          </Grid>
+        </DialogContent>
+      </Dialog>
+
     </>
   );
 };

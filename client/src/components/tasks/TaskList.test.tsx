@@ -4,10 +4,14 @@ import "@testing-library/jest-dom/extend-expect";
 import {TaskList} from "./TaskList";
 import {TasksApiContextProvider} from "../../contexts/tasksContext";
 
+jest.mock("../../api/getAllTasksApi.ts").fn().mockResolvedValue({data: {_embedded: {tasks: []}}})
+
 describe("TaskList", () => {
   it("displays a default message when no tasks have been provided", async () => {
     render(
-      <TasksApiContextProvider overrides={{tasks: []}}>
+      <TasksApiContextProvider overrides={{
+        tasks: []
+      }}>
         <TaskList/>
       </TasksApiContextProvider>
     );

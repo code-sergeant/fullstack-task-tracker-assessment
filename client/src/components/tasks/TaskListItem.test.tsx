@@ -5,6 +5,8 @@ import {TaskListItem} from "./TaskListItem";
 import {TasksApiContextProvider} from "../../contexts/tasksContext";
 import userEvent from "@testing-library/user-event";
 
+jest.mock("../../api/getAllTasksApi.ts").fn().mockResolvedValue({data: {_embedded: {tasks: []}}})
+
 describe("TaskListItem", () => {
   let mockDeleteTask: (taskId: number) => Promise<void>
   beforeEach(() => {

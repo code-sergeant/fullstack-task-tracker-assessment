@@ -31,24 +31,20 @@ export const TasksApiContextProvider: React.FC<Props> = ({overrides, children}) 
     .then((res) => {
       setTasks([...tasks, res.data])
     })
-    .catch(console.error)
 
   const deleteTask = (taskId: number) => deleteTaskApi(taskId)
     .then(() => {
       const tasksMinusDeletedTask = tasks.filter(task => task.id !== taskId)
       setTasks(tasksMinusDeletedTask)
     })
-    .catch(console.error)
 
   useEffect(() => {
-    getAllTasksApi()
-      .then(res => setTasks(res.data._embedded.tasks))
-      .catch(console.error)
+    getAllTasks().then()
   }, [])
 
   return (<TasksContext.Provider value={{
     tasks: overrides?.tasks || tasks,
-    createTask: overrides?.createTask || createTask,
+    createTask,
     getAllTasks: overrides?.getAllTasks || getAllTasks,
     deleteTask: overrides?.deleteTask || deleteTask,
   }}>
