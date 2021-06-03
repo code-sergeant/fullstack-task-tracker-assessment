@@ -1,5 +1,5 @@
 import * as React from "react";
-import {findByLabelText, fireEvent, render, screen, waitFor} from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
 import {AddTaskModal} from "./AddTaskModal";
