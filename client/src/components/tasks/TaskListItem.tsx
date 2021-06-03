@@ -1,29 +1,32 @@
-import React, {useContext} from "react";
+import React from "react";
 import {TaskItem} from "../../types/types";
-import {TasksContext} from "../../contexts/tasksContext";
-import {Card, CardHeader, Grid, IconButton, Typography} from "@material-ui/core";
-import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import {Button, Card, CardActions, CardHeader, Grid} from "@material-ui/core";
 
 type Props = {
-  task: TaskItem
+  task: TaskItem;
+  deleteTask: (deleteTaskInput: number) => void;
 };
 
-export const TaskListItem: React.FC<Props> = ({task}) => {
-  const {deleteTask} = useContext(TasksContext)
-
-  return (
+export const TaskListItem: React.FC<Props> = ({task, deleteTask}) =>
+  <Grid container item spacing={2} xs={12}>
     <Grid item xs={12}>
-      <Card variant={"outlined"}>
+      <Card elevation={8}>
         <CardHeader
-          action={
-            <IconButton aria-label="settings">
-              <DeleteForeverOutlinedIcon color={"error"} onClick={() => deleteTask(task.id)}/>
-            </IconButton>
-          }
           title={task.title}
           subheader={new Date(task.date).toDateString()}
         />
+        <Grid item xs={12}>
+          <CardActions>
+            <Button
+              variant={"contained"}
+              color={"secondary"}
+              onClick={() => deleteTask(task.id)}
+            >
+              Delete
+            </Button>
+          </CardActions>
+        </Grid>
       </Card>
     </Grid>
-  );
-};
+  </Grid>
+

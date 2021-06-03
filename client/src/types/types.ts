@@ -16,9 +16,5 @@ export type CreateTaskInput = {
 
 export type CreateTaskApiResponse = TaskItem
 
+export type DeleteTaskApiResponse = { status: boolean }
 
-export type UpdateTaskInput = {
-  id: number;
-  title: string;
-  date: string;
-}

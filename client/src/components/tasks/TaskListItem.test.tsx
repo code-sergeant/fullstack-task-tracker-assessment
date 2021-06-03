@@ -2,21 +2,22 @@ import * as React from "react";
 import {render, screen} from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import {TaskListItem} from "./TaskListItem";
-import {TasksApiContextProvider} from "../../contexts/tasksContext";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("../../api/getAllTasksApi.ts").fn().mockResolvedValue({data: {_embedded: {tasks: []}}})
 
 describe("TaskListItem", () => {
   let mockDeleteTask: (taskId: number) => Promise<void>
+
   beforeEach(() => {
     mockDeleteTask = jest.fn().mockResolvedValue({})
     render(
-      <TasksApiContextProvider overrides={{deleteTask: mockDeleteTask}}>
-        <TaskListItem task={{
+      <TaskListItem
+        task={{
           id: 1, title: "Task 1", date: new Date(2021, 1, 1)
-        }}/>
-      </TasksApiContextProvider>);
+        }}
+        deleteTask={mockDeleteTask}
+      />)
   })
 
   it("correctly renders a Task List Item", async () => {

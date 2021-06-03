@@ -1,4 +1,7 @@
 import axios from "axios";
-import {CreateTaskApiResponse} from "../types/types";
+import {DeleteTaskApiResponse} from "../types/types";
 
-export const deleteTaskApi = async (taskId: number) => axios.delete<CreateTaskApiResponse>(`/api/tasks/${taskId}`)
+export const deleteTaskApi = async (taskId: number) =>
+  axios.delete<DeleteTaskApiResponse>(`/api/tasks/${taskId}`)
+    .then(res => res.status === 204)
+
