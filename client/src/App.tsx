@@ -25,7 +25,7 @@ export default function App() {
   useEffect(() => {
       getAllTasksHandler()
         .then(tasks => setTasks(tasks))
-  }, [])
+  }, [getAllTasksHandler])
 
   return (
     <>
