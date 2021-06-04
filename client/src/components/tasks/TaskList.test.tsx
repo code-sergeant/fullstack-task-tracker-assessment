@@ -14,9 +14,9 @@ describe("TaskList", () => {
     render(
       <TaskList
         tasks={[
-          {id: 1, title: "Task 1", date: new Date(2021, 1, 1)},
-          {id: 2, title: "Task 2", date: new Date(2021, 1, 2)}
-        ]}
+            {id: 1, title: "Task 1", date: new Date(2021, 1, 1).toDateString()},
+            {id: 2, title: "Task 2", date: new Date(2021, 1, 2).toDateString()}
+          ]}
         deleteTask={jest.fn()}
       />);
 

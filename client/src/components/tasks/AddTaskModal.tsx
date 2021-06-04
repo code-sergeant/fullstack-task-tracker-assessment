@@ -24,9 +24,11 @@ export const AddTaskModal: React.FC<Props> = ({open, toggleOpen, createTask}) =>
     if (!title.trim()) {
       setErrorMessage("Please enter a title.");
     } else {
-      createTask({title})
-      setTitle("")
-      toggleOpen()
+      setTitle("");
+      onSubmit({
+        title,
+        date: new Date().toDateString()
+      });
     }
   }
 

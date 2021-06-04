@@ -29,4 +29,3 @@ export const TaskListItem: React.FC<Props> = ({task, deleteTask}) =>
       </Card>
     </Grid>
   </Grid>
-

@@ -14,7 +14,7 @@ describe("TaskListItem", () => {
     render(
       <TaskListItem
         task={{
-          id: 1, title: "Task 1", date: new Date(2021, 1, 1)
+          id: 1, title: "Task 1", date: new Date(2021, 1, 1).toDateString()
         }}
         deleteTask={mockDeleteTask}
       />)
