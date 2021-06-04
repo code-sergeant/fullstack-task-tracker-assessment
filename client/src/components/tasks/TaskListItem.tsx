@@ -6,6 +6,6 @@ type Props = TaskItem;
 export const TaskListItem: React.FC<Props> = ({ title, date }) => (
   <li style={{ listStyleType: "none" }}>
     <strong>{title}</strong>
-    <p>{date.toDateString()}</p>
+    <p>{date}</p>
   </li>
 );

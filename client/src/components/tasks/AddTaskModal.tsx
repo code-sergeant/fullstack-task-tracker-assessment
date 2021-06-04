@@ -17,7 +17,7 @@ export const AddTaskModal: React.FC<Props> = ({ onSubmit, onCancel }) => {
       setTitle("");
       onSubmit({
         title,
-        date: new Date()
+        date: new Date().toDateString()
       });
     }
   };

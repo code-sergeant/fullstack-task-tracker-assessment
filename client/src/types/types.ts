@@ -1,7 +1,7 @@
 export type TaskItem = {
   id?: number;
   title: string;
-  date: Date;
+  date: string;
 }
 
 export interface TasksApiResponse {

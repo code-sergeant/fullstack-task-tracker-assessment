@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, screen } from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
 import {AddTaskModal} from "./AddTaskModal";
@@ -10,7 +10,7 @@ describe("Add Task Modal", () => {
   beforeEach(() => {
     mockOnClick = jest.fn();
     mockOnCancel = jest.fn();
-    render(<AddTaskModal onSubmit={mockOnClick} onCancel={mockOnCancel} />);
+    render(<AddTaskModal onSubmit={mockOnClick} onCancel={mockOnCancel}/>);
   });
 
   it("renders the task title field", () => {
@@ -40,6 +40,16 @@ describe("Add Task Modal", () => {
     expect(titleInput.value).toEqual("");
   });
 
+  it("calls onSubmit with the proper input values when Submit is clicked", () => {
+    const titleInput = screen.getByLabelText("Task Title") as HTMLInputElement;
+
+    userEvent.type(titleInput, "Test Title");
+
+    userEvent.click(screen.getByText("Submit"));
+
+    expect(mockOnClick).toHaveBeenCalledWith({"title": "Test Title", "date": new Date().toDateString()})
+  });
+
   it("calls onCancel when 'Cancel' button is clicked", () => {
     userEvent.click(screen.getByText("Cancel"));
 
@@ -64,11 +74,10 @@ describe("Add Task Modal", () => {
       expect(screen.getByText("Please enter a title."));
     });
 
-    // TODO: The actual component works, but this test doesn't for some reason
-    // it("calls onCancel when user presses Escape", () => {
-    //   userEvent.type(screen.getByLabelText("Task Title"), "{escape}");
-    //
-    //   expect(mockOnCancel).toHaveBeenCalled();
-    // });
+    it("calls onCancel when user presses Escape", () => {
+      userEvent.type(screen.getByLabelText("Task Title"), "{escape}");
+
+      waitFor(() => expect(mockOnCancel).toHaveBeenCalled());
+    });
   });
 });
