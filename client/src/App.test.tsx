@@ -2,8 +2,10 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App/>);
-  const linkElement = screen.getByText(/task tracker/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders the initial app state successfully', () => {
+  render(<App/>)
+
+  expect(screen.getByText(/task tracker/i)).toBeInTheDocument();
+  expect(screen.getByText(/no tasks have been added yet./i)).toBeInTheDocument();
+  expect(screen.getByText(/add task/i)).toBeInTheDocument();
 });

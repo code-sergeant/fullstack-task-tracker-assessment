@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AddTaskButton } from "./AddTaskButton";
 
-describe("Add Task", () => {
+describe("AddTaskButton", () => {
   it("triggers the onClick handler when clicked", () => {
     const mockOnClick = jest.fn();
     render(<AddTaskButton addTaskHandler={mockOnClick} />);
