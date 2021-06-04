@@ -25,12 +25,24 @@ export const AddTaskModal: React.FC<Props> = ({open, toggleOpen, createTask}) =>
       setErrorMessage("Please enter a title.");
     } else {
       setTitle("");
-      onSubmit({
-        title,
-        date: new Date().toDateString()
+      createTask({
+        title
       });
     }
   }
+
+  const onKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case "Enter":
+        onSubmitHandler();
+        break;
+      case "Escape":
+        toggleOpen();
+        break;
+      default:
+        return;
+    }
+  };
 
   return (
     <>
@@ -49,6 +61,7 @@ export const AddTaskModal: React.FC<Props> = ({open, toggleOpen, createTask}) =>
                   fullWidth
                   id={"title-input"}
                   onChange={(e) => setTitle(e.target.value)}
+                  onKeyDown={onKeyHandler}
                 />
                 <FormHelperText error={!!errorMessage} color={"error"}>{errorMessage}</FormHelperText>
               </FormControl>

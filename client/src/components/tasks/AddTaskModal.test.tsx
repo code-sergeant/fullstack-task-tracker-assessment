@@ -10,8 +10,6 @@ describe("AddTaskModal", () => {
     .mockResolvedValue({id: 1, title: "TestTask1", date: new Date()});
 
   beforeEach(() => {
-    mockOnClick = jest.fn();
-    mockOnCancel = jest.fn();
     render(<AddTaskModal
       open={true}
       toggleOpen={mockToggleOpen}
@@ -36,16 +34,15 @@ describe("AddTaskModal", () => {
     expect(screen.getByText("Submit")).not.toBeDisabled();
   });
 
-  it("clears the task title field when submit is clicked", async () => {
+  it("clears the task title field when submit is clicked", () => {
     userEvent.type(screen.getByLabelText("Task Title"), "Test Title");
     userEvent.click(screen.getByRole("button", {name: "Submit"}));
 
-    await waitFor(() => expect(mockCreateTask).toHaveBeenCalled())
-    await waitFor(() => expect(mockToggleOpen).toHaveBeenCalled())
-
-    // TODO: After switching to Material UI, this test no longer updates the value correctly on useState setTitle call
-    //  need to troubleshoot with another dev
-    // expect((screen.getByLabelText("Task Title") as HTMLInputElement).value).toEqual("")
+    waitFor(() => {
+      expect(mockCreateTask).toHaveBeenCalled()
+      expect(mockToggleOpen).toHaveBeenCalled()
+      expect((screen.getByLabelText("Task Title") as HTMLInputElement).value).toEqual("")
+    })
   });
 
   it("calls onSubmit with the proper input values when Submit is clicked", () => {
@@ -55,12 +52,12 @@ describe("AddTaskModal", () => {
 
     userEvent.click(screen.getByText("Submit"));
 
-    expect(mockOnClick).toHaveBeenCalledWith({"title": "Test Title", "date": new Date().toDateString()})
+    expect(mockCreateTask).toHaveBeenCalledWith({"title": "Test Title"})
   });
 
   it("calls onCancel when 'Cancel' button is clicked", () => {
     userEvent.click(screen.getByText("Cancel"));
-    
+
     waitFor(() => expect(mockToggleOpen).toHaveBeenCalled());
   });
 
@@ -73,7 +70,7 @@ describe("AddTaskModal", () => {
 
       userEvent.type(titleInput, "{enter}");
 
-      expect(titleInput.value).toEqual("");
+      waitFor(() => expect(titleInput.value).toEqual(""));
     });
 
     it("displays an error message if user presses Enter while required fields are empty", () => {
